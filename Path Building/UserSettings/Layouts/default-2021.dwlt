@@ -120,7 +120,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 97
+  controlID: 71
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -145,7 +145,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 98
+  controlID: 110
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -223,7 +223,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 107
+  controlID: 72
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -374,7 +374,7 @@ MonoBehaviour:
       y: 21
       width: 1068
       height: 488
-    m_Scale: {x: 0.45185184, y: 0.45185184}
+    m_Scale: {x: 0.45185181, y: 0.45185184}
     m_Translation: {x: 534, y: 244}
     m_MarginLeft: 0
     m_MarginRight: 0
@@ -619,9 +619,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -0.53706455, y: -42.816475, z: 4.3152637}
+    m_Target: {x: -0.92718714, y: -48.18717, z: -3.004343}
     speed: 2
-    m_Value: {x: -0.53706455, y: -42.816475, z: 4.3152637}
+    m_Value: {x: -0.92718714, y: -48.18717, z: -3.004343}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -668,9 +668,9 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.663505, y: 0.0061310655, z: -0.0052873157, w: 0.74831265}
+    m_Target: {x: 0.62875295, y: 0.3458479, z: -0.3671516, w: 0.59206176}
     speed: 2
-    m_Value: {x: -0.663505, y: -0.0061310655, z: 0.0052873157, w: -0.7483127}
+    m_Value: {x: 0.6286654, y: 0.34579974, z: -0.36710048, w: 0.5919793}
   m_Size:
     m_Target: 36.648033
     speed: 2
@@ -760,21 +760,21 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: e8f9ffff32fbffff
+      m_ExpandedIDs: 32fbffff665a0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: Blue Spy
+        m_OriginalName: Blue Spy
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 0
+        m_UserData: 23058
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 0
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 10}
       m_SearchString: 
@@ -833,7 +833,7 @@ MonoBehaviour:
   m_LastFolders:
   - Assets
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: C:\Users\bschott2\Path Building
+  m_LastProjectPath: C:\Users\bschott2\SpyVsSpy\SpyVsSpy\Path Building
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
@@ -895,7 +895,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
       m_UserAcceptedRename: 0

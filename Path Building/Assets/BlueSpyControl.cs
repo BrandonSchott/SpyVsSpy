@@ -3,56 +3,58 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BlueSpyControl : MonoBehaviour
-{   [SerializeField]
+{
+    [SerializeField]
     GameObject currentNode, destinationNode, targetNode, previousNode, guard, documentNode, ventNode;
 
     PathNode pathNodeScipt;
 
-    bool keyCollected, documentCollected;
+    enum Objective
+    {
+        Key,
+        Document,
+        Vent,
+        Run
+    }
+
+    Objective currentObjective;
     // Start is called before the first frame update
     void Start()
     {
         transform.position = currentNode.transform.position;
         targetNode = currentNode;
-        keyCollected = false;
-        documentCollected = false;
+        currentObjective = Objective.Key;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(!keyCollected)
+        //if(!keyCollected)
+        //{
+        //    GuardAI guardCode= guard.GetComponent<GuardAI>();
+        //    destinationNode = guardCode.currentNode;
+        //}
+        //else if(keyCollected && !documentCollected)
+        //{
+        //    destinationNode = documentNode;
+        //}
+        //else
+        //{
+        //    destinationNode = ventNode;
+        //}
+        switch (currentObjective)
         {
-            GuardAI guardCode= guard.GetComponent<GuardAI>();
-            destinationNode = guardCode.currentNode;
-        }
-        else if(keyCollected && !documentCollected)
-        {
-            destinationNode = documentNode;
-        }
-        else
-        {
-            destinationNode = ventNode;
-        }
+            case Objective.Key:
 
-
-        
-
-        if (Vector3.Distance(transform.position, targetNode.transform.position) < 0.1)
-        {
-            previousNode = currentNode;
-            currentNode = targetNode;
-
-            if (currentNode != destinationNode)
-            {
-                if(currentNode.GetComponent<PathNode>() != null)
+                if (Vector3.Distance(transform.position, targetNode.transform.position) < 0.1)
                 {
-                    targetNode = currentNode.GetComponent<PathNode>().connections[0];
+                    previousNode = currentNode;
+                    currentNode = targetNode;
 
                     foreach (var node in currentNode.GetComponent<PathNode>().connections)
                     {
-                        if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
-                           Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
+                        if (Vector3.Distance(guard.transform.position, node.transform.position) <
+                           Vector3.Distance(guard.transform.position, targetNode.transform.position) && node != previousNode)
                         {
                             targetNode = node;
                         }
@@ -60,39 +62,150 @@ public class BlueSpyControl : MonoBehaviour
                 }
                 else
                 {
-                    targetNode = currentNode.GetComponent<DoorNode>().connections[0];
+                    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 3.5f);
+                }
 
-                    foreach (var node in currentNode.GetComponent<DoorNode>().connections)
+                break;
+            case Objective.Document:
+                destinationNode = documentNode;
+
+                if (Vector3.Distance(transform.position, targetNode.transform.position) < 0.1)
+                {
+                    previousNode = currentNode;
+                    currentNode = targetNode;
+
+                    if (currentNode != destinationNode)
                     {
-                        if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
-                           Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
+
+                        if (currentNode.GetComponent<PathNode>() != null)
                         {
-                            targetNode = node;
+                            targetNode = currentNode.GetComponent<PathNode>().connections[0];
+
+                            foreach (var node in currentNode.GetComponent<PathNode>().connections)
+                            {
+                                if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
+                                   Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
+                                {
+                                    targetNode = node;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            targetNode = currentNode.GetComponent<DoorNode>().connections[0];
+
+                            foreach (var node in currentNode.GetComponent<DoorNode>().connections)
+                            {
+                                if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
+                                   Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
+                                {
+                                    targetNode = node;
+                                }
+                            }
                         }
                     }
                 }
-            }
-            else
-            {
-                if (!keyCollected)
+                else
                 {
-                    keyCollected = true;
+                    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 3.5f);
+                }
+                break;
+            case Objective.Vent:
+                destinationNode = ventNode;
+
+                if (Vector3.Distance(transform.position, targetNode.transform.position) < 0.1)
+                {
+                    previousNode = currentNode;
+                    currentNode = targetNode;
+
+                    if (currentNode != destinationNode)
+                    {
+
+                        if (currentNode.GetComponent<PathNode>() != null)
+                        {
+                            targetNode = currentNode.GetComponent<PathNode>().connections[0];
+
+                            foreach (var node in currentNode.GetComponent<PathNode>().connections)
+                            {
+                                if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
+                                   Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
+                                {
+                                    targetNode = node;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            targetNode = currentNode.GetComponent<DoorNode>().connections[0];
+
+                            foreach (var node in currentNode.GetComponent<DoorNode>().connections)
+                            {
+                                if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
+                                   Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
+                                {
+                                    targetNode = node;
+                                }
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    documentCollected = true;
+                    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 3.5f);
                 }
-            }
-            
-        }
-        else
-        {
-            transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 3.5f);
+                break;
+            case Objective.Run:
+                break;
         }
 
-        if(currentNode == ventNode && documentCollected)
+        //if (Vector3.Distance(transform.position, targetNode.transform.position) < 0.1)
+        //{
+        //    previousNode = currentNode;
+        //    currentNode = targetNode;
+
+        //    if (currentNode != destinationNode)
+        //    {
+                
+        //        if (currentNode.GetComponent<PathNode>() != null)
+        //        {
+        //            targetNode = currentNode.GetComponent<PathNode>().connections[0];
+
+        //            foreach (var node in currentNode.GetComponent<PathNode>().connections)
+        //            {
+        //                if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
+        //                   Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
+        //                {
+        //                    targetNode = node;
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            targetNode = currentNode.GetComponent<DoorNode>().connections[0];
+
+        //            foreach (var node in currentNode.GetComponent<DoorNode>().connections)
+        //            {
+        //                if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
+        //                   Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
+        //                {
+        //                    targetNode = node;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 3.5f);
+        //}
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.tag == "Guard")
         {
-            gameObject.SetActive(false);
+            currentObjective = Objective.Document;
         }
     }
 }
