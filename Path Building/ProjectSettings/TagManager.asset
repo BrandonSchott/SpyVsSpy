@@ -9,6 +9,7 @@ TagManager:
   - Wall
   - Door
   - Guard
+  - Spy
   layers:
   - Default
   - TransparentFX

@@ -17,7 +17,10 @@ public class BlueSpyControl : MonoBehaviour
         Run
     }
 
-    Objective currentObjective;
+    RaycastHit hit;
+
+    [SerializeField]
+    Objective currentObjective, currentMissionObjective;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,19 +32,7 @@ public class BlueSpyControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if(!keyCollected)
-        //{
-        //    GuardAI guardCode= guard.GetComponent<GuardAI>();
-        //    destinationNode = guardCode.currentNode;
-        //}
-        //else if(keyCollected && !documentCollected)
-        //{
-        //    destinationNode = documentNode;
-        //}
-        //else
-        //{
-        //    destinationNode = ventNode;
-        //}
+
         switch (currentObjective)
         {
             case Objective.Key:
@@ -62,7 +53,7 @@ public class BlueSpyControl : MonoBehaviour
                 }
                 else
                 {
-                    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 3.5f);
+                    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 2.5f);
                 }
 
                 break;
@@ -104,11 +95,16 @@ public class BlueSpyControl : MonoBehaviour
                             }
                         }
                     }
+                    else
+                    {
+                        currentObjective = Objective.Vent;
+                    }
                 }
                 else
                 {
-                    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 3.5f);
+                    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 2.5f);
                 }
+
                 break;
             case Objective.Vent:
                 destinationNode = ventNode;
@@ -148,56 +144,42 @@ public class BlueSpyControl : MonoBehaviour
                             }
                         }
                     }
+                    else
+                    {
+                        gameObject.SetActive(false);
+                    }
                 }
                 else
                 {
-                    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 3.5f);
+                    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 2.5f);
                 }
                 break;
             case Objective.Run:
+                if (Vector3.Distance(transform.position, targetNode.transform.position) < 0.1)
+                {
+                    previousNode = currentNode;
+                    currentNode = targetNode;
+
+                    foreach (var node in currentNode.GetComponent<PathNode>().connections)
+                    {
+                        if (Vector3.Distance(guard.transform.position, node.transform.position) >
+                           Vector3.Distance(guard.transform.position, targetNode.transform.position) && node.GetComponent<PathNode>() != null)
+                        {
+                            targetNode = node;
+                        }
+                    }
+                }
+                else
+                {
+                    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 3f);
+                }
+                if(guard.GetComponent<GuardAI>().spyDetected == false)
+                {
+                    currentObjective = currentMissionObjective;
+                }
+
                 break;
         }
-
-        //if (Vector3.Distance(transform.position, targetNode.transform.position) < 0.1)
-        //{
-        //    previousNode = currentNode;
-        //    currentNode = targetNode;
-
-        //    if (currentNode != destinationNode)
-        //    {
-                
-        //        if (currentNode.GetComponent<PathNode>() != null)
-        //        {
-        //            targetNode = currentNode.GetComponent<PathNode>().connections[0];
-
-        //            foreach (var node in currentNode.GetComponent<PathNode>().connections)
-        //            {
-        //                if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
-        //                   Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
-        //                {
-        //                    targetNode = node;
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            targetNode = currentNode.GetComponent<DoorNode>().connections[0];
-
-        //            foreach (var node in currentNode.GetComponent<DoorNode>().connections)
-        //            {
-        //                if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
-        //                   Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
-        //                {
-        //                    targetNode = node;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-        //else
-        //{
-        //    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 3.5f);
-        //}
 
     }
 
@@ -205,7 +187,19 @@ public class BlueSpyControl : MonoBehaviour
     {
         if (other.transform.tag == "Guard")
         {
+            Debug.Log("Got Key");
             currentObjective = Objective.Document;
         }
+    }
+
+    public void Run()
+    {
+        Debug.Log("I AM NOW RUNNING");
+        if(currentObjective != Objective.Run)
+        {
+            currentMissionObjective = currentObjective;
+        }
+
+        currentObjective = Objective.Run;
     }
 }

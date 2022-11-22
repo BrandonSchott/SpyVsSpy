@@ -10,49 +10,118 @@ public class GuardAI : MonoBehaviour
     GameObject targetNode, previousNode;
 
     PathNode pathNodeScipt;
+
+    [SerializeField]
+    public bool spyDetected;
+
+    RaycastHit hit;
+
+    [SerializeField]
+    Vector3 spyLastPosition;
     // Start is called before the first frame update
     void Start()
     {
         transform.position = currentNode.transform.position;
         targetNode = currentNode;
+        spyDetected = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(transform.position, targetNode.transform.position) < 0.1)
+       
+        if (Physics.Raycast(transform.position, targetNode.transform.position - currentNode.transform.position, out hit, 50))
         {
-            previousNode = currentNode;
-            currentNode = targetNode;
-
-            //if (currentNode != destinationNode)
-            //{
-            //    targetNode = currentNode.GetComponent<PathNode>().connections[0];
-            //    foreach (var node in currentNode.GetComponent<PathNode>().connections)
-            //    {
-            //        if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
-            //           Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
-            //        {
-            //            targetNode = node;
-            //        }
-            //    }
-            //}
-            bool validPath = false;
-            while (!validPath)
+            if (hit.transform.tag == "Spy")
             {
-                pathNodeScipt = currentNode.GetComponent<PathNode>();
-                int index = pathNodeScipt.connections.Count;
-                GameObject ideaNode = pathNodeScipt.connections[Random.Range(0, index)];
-                if(ideaNode.GetComponent<PathNode>() != null && ideaNode != previousNode)
+                Debug.Log("Found You");
+                spyDetected = true;
+                spyLastPosition = hit.transform.position;
+                hit.transform.SendMessage("Run");
+            }
+        }
+
+
+        if (!spyDetected)
+        {
+            if (Vector3.Distance(transform.position, targetNode.transform.position) < 0.1)
+            {
+                previousNode = currentNode;
+                currentNode = targetNode;
+
+                bool validPath = false;
+                while (!validPath)
                 {
-                    targetNode = ideaNode;
-                    validPath = true;
+                    pathNodeScipt = currentNode.GetComponent<PathNode>();
+                    int index = pathNodeScipt.connections.Count;
+                    GameObject ideaNode = pathNodeScipt.connections[Random.Range(0, index)];
+                    if (ideaNode.GetComponent<PathNode>() != null && ideaNode != previousNode)
+                    {
+                        targetNode = ideaNode;
+                        validPath = true;
+                    }
                 }
+            }
+            else
+            {
+                transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 2.0f);
             }
         }
         else
         {
-            transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 2.0f);
+            if(Vector3.Distance(spyLastPosition, transform.position) < 1)
+            {
+                spyDetected = false;
+            }
+            else
+            {
+                if (Vector3.Distance(transform.position, targetNode.transform.position) < 0.1)
+                {
+                    previousNode = currentNode;
+                    currentNode = targetNode;
+
+                    foreach (var node in currentNode.GetComponent<PathNode>().connections)
+                    {
+                        if (Vector3.Distance(spyLastPosition, node.transform.position) <
+                           Vector3.Distance(spyLastPosition, targetNode.transform.position) && node != previousNode)
+                        {
+                            targetNode = node;
+                        }
+                    }
+                }
+                else
+                {
+                    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 2f);
+                }
+            }
+            //if (Vector3.Distance(transform.position, targetNode.transform.position) < 0.1)
+            //{
+            //    if (Vector3.Distance(transform.position, spyLastPosition) < 0.5)
+            //    {
+            //        spyDetected = false;
+            //    }
+            //    else
+            //    {
+            //    previousNode = currentNode;
+            //        currentNode = targetNode;
+
+            //        foreach (var node in currentNode.GetComponent<PathNode>().connections)
+            //        {
+            //            if (Vector3.Distance(spyLastPosition, node.transform.position) <
+            //               Vector3.Distance(spyLastPosition, targetNode.transform.position) && node.GetComponent<PathNode>() != null)
+            //            {
+            //                targetNode = node;
+            //            }
+            //        }
+            //    }
+
+            //}
+            //else
+            //{
+            //    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 2.0f);
+            //}
+
         }
+
     }
 }
