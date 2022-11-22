@@ -21,6 +21,7 @@ public class BlueSpyControl : MonoBehaviour
 
     [SerializeField]
     Objective currentObjective, currentMissionObjective;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -189,6 +190,7 @@ public class BlueSpyControl : MonoBehaviour
         {
             Debug.Log("Got Key");
             currentObjective = Objective.Document;
+            BroadcastMessage("Unlocked");
         }
     }
 

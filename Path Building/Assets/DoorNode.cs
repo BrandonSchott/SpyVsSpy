@@ -5,11 +5,17 @@ using UnityEngine;
 public class DoorNode : MonoBehaviour
 {
     public List<GameObject> connections;
-
+    public bool locked;
     DoorNode()
     {
         connections = new List<GameObject>();
     }
+
+    private void Start()
+    {
+        locked = true;
+    }
+
 
     public void AddConnection(GameObject target)
     {
@@ -19,6 +25,11 @@ public class DoorNode : MonoBehaviour
     public void ClearConnections()
     {
         connections.Clear();
+    }
+
+    public void Unlocked()
+    {
+        locked = false;
     }
 
     private void OnDrawGizmos()
