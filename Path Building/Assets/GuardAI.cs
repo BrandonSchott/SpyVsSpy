@@ -59,7 +59,12 @@ public class GuardAI : MonoBehaviour
 
                         int index = pathNodeScipt.connections.Count;
                         GameObject ideaNode = pathNodeScipt.connections[Random.Range(0, index)];
-                        if (ideaNode != previousNode)
+                        if (ideaNode != previousNode && ideaNode.GetComponent<DoorNode>() != null && !ideaNode.GetComponent<DoorNode>().locked)
+                        {
+                            targetNode = ideaNode;
+                            validPath = true;
+                        }
+                        else if(ideaNode != previousNode)
                         {
                             targetNode = ideaNode;
                             validPath = true;
@@ -122,6 +127,7 @@ public class GuardAI : MonoBehaviour
         if (other.transform.tag == "Spy" && spyDetected)
         {
             Debug.Log("Got YOU");
+            other.gameObject.SetActive(false);
         }
     }
 }

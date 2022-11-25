@@ -5,7 +5,7 @@ using UnityEngine;
 public class BlueSpyControl : MonoBehaviour
 {
     [SerializeField]
-    GameObject currentNode, destinationNode, targetNode, previousNode, guard, documentNode, ventNode;
+    GameObject currentNode, destinationNode, targetNode, previousNode, guard, documentNode, ventNode, nodeSpawner;
 
     PathNode pathNodeScipt;
 
@@ -28,6 +28,7 @@ public class BlueSpyControl : MonoBehaviour
         transform.position = currentNode.transform.position;
         targetNode = currentNode;
         currentObjective = Objective.Key;
+        currentMissionObjective = Objective.Key;
     }
 
     // Update is called once per frame
@@ -161,14 +162,56 @@ public class BlueSpyControl : MonoBehaviour
                     previousNode = currentNode;
                     currentNode = targetNode;
 
-                    foreach (var node in currentNode.GetComponent<PathNode>().connections)
+                    if(currentNode.GetComponent<PathNode>() != null)
                     {
-                        if (Vector3.Distance(guard.transform.position, node.transform.position) >
-                           Vector3.Distance(guard.transform.position, targetNode.transform.position) && node.GetComponent<PathNode>() != null)
+                        targetNode = currentNode.GetComponent<PathNode>().connections[0];
+                        
+                        foreach(var node in currentNode.GetComponent<PathNode>().connections)
                         {
-                            targetNode = node;
+                            if(node.GetComponent<DoorNode>() != null && !node.GetComponent<DoorNode>().locked)
+                            {
+                                if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
+                               Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
+                                {
+                                    targetNode = node;
+                                }
+                            }
+                            else
+                            {
+                                if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
+                               Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
+                                {
+                                    targetNode = node;
+                                }
+                            }
                         }
                     }
+                    //if (currentNode.GetComponent<PathNode>() != null)
+                    //{
+                    //    targetNode = currentNode.GetComponent<PathNode>().connections[0];
+
+                    //    foreach (var node in currentNode.GetComponent<PathNode>().connections)
+                    //    {
+                    //        if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
+                    //           Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
+                    //        {
+                    //            targetNode = node;
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    targetNode = currentNode.GetComponent<DoorNode>().connections[0];
+
+                    //    foreach (var node in currentNode.GetComponent<DoorNode>().connections)
+                    //    {
+                    //        if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
+                    //           Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
+                    //        {
+                    //            targetNode = node;
+                    //        }
+                    //    }
+                    //}
                 }
                 else
                 {
@@ -186,11 +229,11 @@ public class BlueSpyControl : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.transform.tag == "Guard")
+        if (other.transform.tag == "Guard" && currentObjective == Objective.Key)
         {
             Debug.Log("Got Key");
             currentObjective = Objective.Document;
-            BroadcastMessage("Unlocked");
+            nodeSpawner.BroadcastMessage("Unlocked");
         }
     }
 
