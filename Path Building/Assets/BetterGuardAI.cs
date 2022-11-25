@@ -175,4 +175,13 @@ public class BetterGuardAI : MonoBehaviour
                 break;
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.transform.tag == "Spy" && guardState == State.chase)
+        {
+            other.gameObject.SetActive(false);
+            //Send message to gameController they are out
+        }
+    }
 }

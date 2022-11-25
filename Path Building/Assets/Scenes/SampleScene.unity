@@ -570,6 +570,7 @@ GameObject:
   - component: {fileID: 182439951}
   - component: {fileID: 182439953}
   - component: {fileID: 182439954}
+  - component: {fileID: 182439955}
   m_Layer: 0
   m_Name: Blue Spy
   m_TagString: Spy
@@ -642,6 +643,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.2, y: 1.9031584, z: 1.2}
   m_Center: {x: 0, y: 1.1369294, z: 0}
+--- !u!54 &182439955
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182439950}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &199589314
 GameObject:
   m_ObjectHideFlags: 0
@@ -1228,6 +1245,8 @@ GameObject:
   m_Component:
   - component: {fileID: 405639649}
   - component: {fileID: 405639650}
+  - component: {fileID: 405639651}
+  - component: {fileID: 405639652}
   m_Layer: 0
   m_Name: Guard
   m_TagString: Guard
@@ -1272,6 +1291,35 @@ MonoBehaviour:
   targetNode: {fileID: 0}
   destinationNode: {fileID: 0}
   guardState: 0
+--- !u!65 &405639651
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405639647}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.5, y: 1.5, z: 1.5}
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!54 &405639652
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405639647}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &420291205
 GameObject:
   m_ObjectHideFlags: 0
@@ -5929,6 +5977,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2074657727}
   - component: {fileID: 2074657726}
+  - component: {fileID: 2074657728}
+  - component: {fileID: 2074657729}
   m_Layer: 0
   m_Name: Guard (1)
   m_TagString: Guard
@@ -5973,6 +6023,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2074657728
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2074657725}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.5, y: 1.5, z: 1.5}
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!54 &2074657729
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2074657725}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &2079448564
 GameObject:
   m_ObjectHideFlags: 0
