@@ -155,6 +155,47 @@ public class BetterBlueSpyAI : MonoBehaviour
 
                         break;
                     case Mission.Vent:
+                        if (Vector3.Distance(transform.position, targetNode.transform.position) < 0.1)
+                        {
+                            previousNode = currentNode;
+                            currentNode = targetNode;
+
+                            if (currentNode.GetComponent<PathNode>() != null)
+                            {
+                                targetNode = currentNode.GetComponent<PathNode>().connections[0];
+
+                                foreach (var node in currentNode.GetComponent<PathNode>().connections)
+                                {
+                                    if (Vector3.Distance(vent.transform.position, node.transform.position) <
+                                       Vector3.Distance(vent.transform.position, targetNode.transform.position) && node != previousNode)
+                                    {
+                                        targetNode = node;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                targetNode = currentNode.GetComponent<DoorNode>().connections[0];
+
+                                foreach (var node in currentNode.GetComponent<DoorNode>().connections)
+                                {
+                                    if (Vector3.Distance(vent.transform.position, node.transform.position) <
+                                       Vector3.Distance(vent.transform.position, targetNode.transform.position))
+                                    {
+                                        targetNode = node;
+                                    }
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 2.5f);
+                        }
+                        if (Vector3.Distance(transform.position, vent.transform.position) < 1)
+                        {
+                            gameObject.SetActive(false);
+                        }
                         break;
                 }
 

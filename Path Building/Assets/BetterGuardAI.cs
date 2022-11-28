@@ -141,7 +141,6 @@ public class BetterGuardAI : MonoBehaviour
                             {
                                 spyLastPosition = hit.transform.position;
                                 gotAway = false;
-                                Debug.Log(spyLastPosition);
                             }
                         }
                     }
@@ -161,7 +160,7 @@ public class BetterGuardAI : MonoBehaviour
                     foreach (var node in currentNode.GetComponent<PathNode>().connections)
                     {
                         if (Vector3.Distance(spyLastPosition, node.transform.position) <
-                           Vector3.Distance(spyLastPosition, targetNode.transform.position))
+                           Vector3.Distance(spyLastPosition, targetNode.transform.position) && node != previousNode)
                         {
                             targetNode = node;
                         }
