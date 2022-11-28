@@ -110,43 +110,38 @@ public class BetterBlueSpyAI : MonoBehaviour
 
                         break;
                     case Mission.Documents:
-                        destinationNode = documents;
-
                         if (Vector3.Distance(transform.position, targetNode.transform.position) < 0.1)
                         {
                             previousNode = currentNode;
                             currentNode = targetNode;
 
-                            if (currentNode != destinationNode)
+                            if (currentNode.GetComponent<PathNode>() != null)
                             {
+                                targetNode = currentNode.GetComponent<PathNode>().connections[0];
 
-                                if (currentNode.GetComponent<PathNode>() != null)
+                                foreach (var node in currentNode.GetComponent<PathNode>().connections)
                                 {
-                                    targetNode = currentNode.GetComponent<PathNode>().connections[0];
-
-                                    foreach (var node in currentNode.GetComponent<PathNode>().connections)
+                                    if (Vector3.Distance(documents.transform.position, node.transform.position) <
+                                       Vector3.Distance(documents.transform.position, targetNode.transform.position))
                                     {
-                                        if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
-                                           Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
-                                        {
-                                            targetNode = node;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    targetNode = currentNode.GetComponent<DoorNode>().connections[0];
-
-                                    foreach (var node in currentNode.GetComponent<DoorNode>().connections)
-                                    {
-                                        if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
-                                           Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
-                                        {
-                                            targetNode = node;
-                                        }
+                                        targetNode = node;
                                     }
                                 }
                             }
+                            else
+                            {
+                                targetNode = currentNode.GetComponent<DoorNode>().connections[0];
+
+                                foreach (var node in currentNode.GetComponent<DoorNode>().connections)
+                                {
+                                    if (Vector3.Distance(documents.transform.position, node.transform.position) <
+                                       Vector3.Distance(documents.transform.position, targetNode.transform.position))
+                                    {
+                                        targetNode = node;
+                                    }
+                                }
+                            }
+
                         }
                         else
                         {
@@ -175,13 +170,17 @@ public class BetterBlueSpyAI : MonoBehaviour
 
                         foreach (var node in currentNode.GetComponent<PathNode>().connections)
                         {
-                            if (node.GetComponent<DoorNode>() != null && node.GetComponent<DoorNode>().locked == false)
+                            if (node.GetComponent<DoorNode>() != null)
                             {
-                                if (Vector3.Distance(guard.transform.position, node.transform.position) >
-                               Vector3.Distance(guard.transform.position, targetNode.transform.position))
+                                if (node.GetComponent<DoorNode>().locked == false)
                                 {
-                                    targetNode = node;
+                                    if (Vector3.Distance(guard.transform.position, node.transform.position) >
+                                        Vector3.Distance(guard.transform.position, targetNode.transform.position))
+                                    {
+                                        targetNode = node;
+                                    }
                                 }
+
                             }
                             else
                             {

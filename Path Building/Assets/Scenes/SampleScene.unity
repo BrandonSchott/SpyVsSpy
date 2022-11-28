@@ -637,8 +637,12 @@ MonoBehaviour:
   currentNode: {fileID: 1894845857}
   targetNode: {fileID: 0}
   destinationNode: {fileID: 0}
-  vent: {fileID: 0}
-  documents: {fileID: 0}
+  vent: {fileID: 2123072086}
+  documents: {fileID: 1598811451}
+  door1: {fileID: 934081013}
+  door2: {fileID: 1753952152}
+  spyState: 0
+  spyMission: 0
 --- !u!1 &199589314
 GameObject:
   m_ObjectHideFlags: 0
