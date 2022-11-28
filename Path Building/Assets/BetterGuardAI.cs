@@ -114,7 +114,7 @@ public class BetterGuardAI : MonoBehaviour
                 }
                 else
                 {
-                    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 3.0f);
+                    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 2f);
                 }
 
                 if (Physics.Raycast(transform.position, targetNode.transform.position - currentNode.transform.position, out hit, 50))
@@ -122,7 +122,7 @@ public class BetterGuardAI : MonoBehaviour
                     if (hit.transform.tag == "Spy")
                     {
                         spyLastPosition = hit.transform.position;
-                        hit.transform.SendMessage("Run");
+                        hit.transform.SendMessage("Run", this.gameObject);
                         guardState = State.chase;
                     }
                 }
@@ -169,7 +169,7 @@ public class BetterGuardAI : MonoBehaviour
                 }
                 else
                 {
-                    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 2f);
+                    transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 3f);
                 }
 
                 break;
