@@ -9,7 +9,7 @@ public class BetterGuardAI : MonoBehaviour
     List<GameObject> patrolPoints = new List<GameObject>();
 
     [SerializeField]
-    GameObject currentNode, targetNode, destinationNode;
+    GameObject currentNode, targetNode, destinationNode, gameSystem;
 
     GameObject previousNode, spyFound;
 
@@ -180,7 +180,9 @@ public class BetterGuardAI : MonoBehaviour
     {
         if(other.transform.tag == "Spy" && guardState == State.chase)
         {
+            gameSystem.SendMessage("Captured", other.gameObject);
             other.gameObject.SetActive(false);
+
             //Send message to gameController they are out
         }
     }

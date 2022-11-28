@@ -5,7 +5,7 @@ using UnityEngine;
 public class BetterBlueSpyAI : MonoBehaviour
 {
     [SerializeField]
-    GameObject currentNode, targetNode, destinationNode;
+    public GameObject currentNode, targetNode, destinationNode;
 
     [SerializeField]
     GameObject vent, documents, door1, door2;
@@ -59,20 +59,21 @@ public class BetterBlueSpyAI : MonoBehaviour
                             currentNode = targetNode;
 
                             bool validPath = false;
-                            while (!validPath)
+                            if (currentNode.GetComponent<PathNode>() != null)
                             {
-                                if (currentNode.GetComponent<PathNode>() != null)
+                                while (!validPath)
                                 {
+
                                     int index = currentNode.GetComponent<PathNode>().connections.Count;
                                     GameObject ideaNode = currentNode.GetComponent<PathNode>().connections[Random.Range(0, index)];
-                                    if (ideaNode != previousNode && ideaNode.GetComponent<DoorNode>() == null)
+                                    if (ideaNode != previousNode && ideaNode.GetComponent<PathNode>() != null)
                                     {
                                         targetNode = ideaNode;
                                         validPath = true;
                                     }
+
                                 }
                             }
-
                         }
                         else
                         {
@@ -122,7 +123,7 @@ public class BetterBlueSpyAI : MonoBehaviour
                                 foreach (var node in currentNode.GetComponent<PathNode>().connections)
                                 {
                                     if (Vector3.Distance(documents.transform.position, node.transform.position) <
-                                       Vector3.Distance(documents.transform.position, targetNode.transform.position))
+                                       Vector3.Distance(documents.transform.position, targetNode.transform.position) && node != previousNode)
                                     {
                                         targetNode = node;
                                     }
