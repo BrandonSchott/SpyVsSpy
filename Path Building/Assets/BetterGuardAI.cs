@@ -124,56 +124,6 @@ public class BetterGuardAI : MonoBehaviour
                         {
                             transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 2f);
                         }
-                        //if (currentNode.GetComponent<PathNode>() != null)
-                        //{
-                        //    targetNode = currentNode.GetComponent<PathNode>().connections[0];
-                        //    foreach (var node in currentNode.GetComponent<PathNode>().connections)
-                        //    {
-                        //        if (node.GetComponent<DoorNode>() != null)
-                        //        {
-                        //            //if (!node.GetComponent<DoorNode>().locked)
-                        //            //{
-                        //            //    if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
-                        //            //        Vector3.Distance(destinationNode.transform.position, targetNode.transform.position)
-                        //            //        && node != previousNode)
-                        //            //    {
-                        //            //        targetNode = node;
-                        //            //    }
-                        //            //}
-
-                        //        }
-                        //        else
-                        //        {
-                        //            if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
-                        //           Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
-                        //            {
-                        //                targetNode = node;
-                        //            }
-                        //        }
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    targetNode = currentNode.GetComponent<DoorNode>().connections[0];
-                        //    foreach (var node in currentNode.GetComponent<DoorNode>().connections)
-                        //    {
-                        //        if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
-                        //           Vector3.Distance(destinationNode.transform.position, targetNode.transform.position))
-                        //        {
-                        //            targetNode = node;
-                        //        }
-                        //    }
-                        //}
-
-                        //targetNode = currentNode.GetComponent<PathNode>().connections[0];
-                        //foreach (var node in currentNode.GetComponent<PathNode>().connections)
-                        //{
-                        //    if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
-                        //       Vector3.Distance(destinationNode.transform.position, targetNode.transform.position))
-                        //    {
-                        //        targetNode = node;
-                        //    }
-                        //}
                     }
                 }
                 else
@@ -224,7 +174,7 @@ public class BetterGuardAI : MonoBehaviour
                     foreach (var node in currentNode.GetComponent<PathNode>().connections)
                     {
                         if (Vector3.Distance(spyLastPosition, node.transform.position) <
-                           Vector3.Distance(spyLastPosition, targetNode.transform.position) && node != previousNode)
+                           Vector3.Distance(spyLastPosition, targetNode.transform.position))
                         {
                             targetNode = node;
                         }

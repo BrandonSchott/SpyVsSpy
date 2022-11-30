@@ -238,7 +238,6 @@ public class BetterRedSpyAI : MonoBehaviour
     }
     public void Run(GameObject guardChasing)
     {
-        Debug.Log("Oh SHIT");
         spyState = State.Run;
         guard = guardChasing;
     }

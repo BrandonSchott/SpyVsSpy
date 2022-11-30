@@ -213,7 +213,6 @@ public class BetterBlueSpyAI : MonoBehaviour
 
                     if (currentNode.GetComponent<PathNode>() != null)
                     {
-                        targetNode = currentNode.GetComponent<PathNode>().connections[0];
 
                         foreach (var node in currentNode.GetComponent<PathNode>().connections)
                         {
