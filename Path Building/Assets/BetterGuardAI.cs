@@ -16,13 +16,13 @@ public class BetterGuardAI : MonoBehaviour
     Vector3 spyLastPosition;
 
     int targetPatrolPoint;
-    enum State
+    public enum State
     {
         patrol,
         chase
     }
     [SerializeField]
-    State guardState;
+    public State guardState;
 
     PathNode pathNodeScipt;
     DoorNode doorNodeScipt;
@@ -40,6 +40,11 @@ public class BetterGuardAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
         switch (guardState)
         {
             case State.patrol:
@@ -63,43 +68,102 @@ public class BetterGuardAI : MonoBehaviour
 
                     if (currentNode != destinationNode)
                     {
-                        if (currentNode.GetComponent<PathNode>() != null)
+                        if (Vector3.Distance(transform.position, targetNode.transform.position) < 0.1)
                         {
-                            targetNode = currentNode.GetComponent<PathNode>().connections[0];
-                            foreach (var node in currentNode.GetComponent<PathNode>().connections)
+                            previousNode = currentNode;
+                            currentNode = targetNode;
+                            //problem START
+                            if (currentNode.GetComponent<PathNode>() != null)
                             {
-                                if (node.GetComponent<PathNode>() != null)
-                                {
-                                    if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
-                                   Vector3.Distance(destinationNode.transform.position, targetNode.transform.position))
-                                    {
-                                        targetNode = node;
-                                    }
-                                }
-                                else
-                                {
-                                    if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
-                                   Vector3.Distance(destinationNode.transform.position, targetNode.transform.position)
-                                   && !node.GetComponent<DoorNode>().locked)
-                                    {
-                                        targetNode = node;
-                                    }
-                                }
+                                targetNode = currentNode.GetComponent<PathNode>().connections[0];
 
+                                foreach (var node in currentNode.GetComponent<PathNode>().connections)
+                                {
+                                    if (node.GetComponent<DoorNode>() != null)
+                                    {
+                                        if (!node.GetComponent<DoorNode>().locked)
+                                        {
+                                            if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
+                                                Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
+                                            {
+                                                targetNode = node;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (node != previousNode)
+                                        {
+                                            if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
+                                                Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) || targetNode == null)
+                                            {
+                                                targetNode = node;
+                                            }
+                                        }
+
+                                    }
+                                }
                             }
+                            //Problem END
+                            else
+                            {
+                                targetNode = currentNode.GetComponent<DoorNode>().connections[0];
+
+                                foreach (var node in currentNode.GetComponent<DoorNode>().connections)
+                                {
+                                    if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
+                                       Vector3.Distance(destinationNode.transform.position, targetNode.transform.position))
+                                    {
+                                        targetNode = node;
+                                    }
+                                }
+                            }
+
                         }
                         else
                         {
-                            targetNode = currentNode.GetComponent<DoorNode>().connections[0];
-                            foreach (var node in currentNode.GetComponent<DoorNode>().connections)
-                            {
-                                if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
-                                   Vector3.Distance(destinationNode.transform.position, targetNode.transform.position))
-                                {
-                                    targetNode = node;
-                                }
-                            }
+                            transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 2f);
                         }
+                        //if (currentNode.GetComponent<PathNode>() != null)
+                        //{
+                        //    targetNode = currentNode.GetComponent<PathNode>().connections[0];
+                        //    foreach (var node in currentNode.GetComponent<PathNode>().connections)
+                        //    {
+                        //        if (node.GetComponent<DoorNode>() != null)
+                        //        {
+                        //            //if (!node.GetComponent<DoorNode>().locked)
+                        //            //{
+                        //            //    if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
+                        //            //        Vector3.Distance(destinationNode.transform.position, targetNode.transform.position)
+                        //            //        && node != previousNode)
+                        //            //    {
+                        //            //        targetNode = node;
+                        //            //    }
+                        //            //}
+
+                        //        }
+                        //        else
+                        //        {
+                        //            if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
+                        //           Vector3.Distance(destinationNode.transform.position, targetNode.transform.position) && node != previousNode)
+                        //            {
+                        //                targetNode = node;
+                        //            }
+                        //        }
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    targetNode = currentNode.GetComponent<DoorNode>().connections[0];
+                        //    foreach (var node in currentNode.GetComponent<DoorNode>().connections)
+                        //    {
+                        //        if (Vector3.Distance(destinationNode.transform.position, node.transform.position) <
+                        //           Vector3.Distance(destinationNode.transform.position, targetNode.transform.position))
+                        //        {
+                        //            targetNode = node;
+                        //        }
+                        //    }
+                        //}
 
                         //targetNode = currentNode.GetComponent<PathNode>().connections[0];
                         //foreach (var node in currentNode.GetComponent<PathNode>().connections)
@@ -177,7 +241,7 @@ public class BetterGuardAI : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.transform.tag == "Spy" && guardState == State.chase)
+        if (other.transform.tag == "Spy" && guardState == State.chase)
         {
             gameSystem.SendMessage("Captured", other.gameObject);
             other.gameObject.SetActive(false);

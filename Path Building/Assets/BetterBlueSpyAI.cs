@@ -14,25 +14,26 @@ public class BetterBlueSpyAI : MonoBehaviour
 
     RaycastHit hit;
 
-    enum State
+    public enum State
     {
         DoingMission,
         Run
     }
 
     [SerializeField]
-    State spyState;
+    public State spyState;
 
-    enum Mission
+    public enum Mission
     {
         FindGuard,
         StealKey,
         Documents,
-        Vent
+        Vent,
+        Success
     }
 
     [SerializeField]
-    Mission spyMission;
+    public Mission spyMission;
 
     // Start is called before the first frame update
     void Start()
@@ -79,7 +80,7 @@ public class BetterBlueSpyAI : MonoBehaviour
                         {
                             transform.Translate((targetNode.transform.position - transform.position).normalized * Time.deltaTime * 3.0f);
                         }
-                        if (Physics.Raycast(currentNode.transform.position, targetNode.transform.position - currentNode.transform.position, out hit, 50))
+                        if (Physics.Raycast(transform.position, targetNode.transform.position - currentNode.transform.position, out hit, 50))
                         {
                             if (hit.transform.tag == "Guard")
                             {
@@ -111,6 +112,8 @@ public class BetterBlueSpyAI : MonoBehaviour
 
                         break;
                     case Mission.Documents:
+                        door1.SendMessage("Unlocked");
+                        door2.SendMessage("Unlocked");
                         if (Vector3.Distance(transform.position, targetNode.transform.position) < 0.1)
                         {
                             previousNode = currentNode;
@@ -180,7 +183,7 @@ public class BetterBlueSpyAI : MonoBehaviour
                                 foreach (var node in currentNode.GetComponent<DoorNode>().connections)
                                 {
                                     if (Vector3.Distance(vent.transform.position, node.transform.position) <
-                                       Vector3.Distance(vent.transform.position, targetNode.transform.position))
+                                       Vector3.Distance(vent.transform.position, targetNode.transform.position) && node != previousNode)
                                     {
                                         targetNode = node;
                                     }
@@ -194,9 +197,11 @@ public class BetterBlueSpyAI : MonoBehaviour
                         }
                         if (Vector3.Distance(transform.position, vent.transform.position) < 1)
                         {
+                            spyMission = Mission.Success;
                             gameObject.SetActive(false);
                         }
                         break;
+
                 }
 
                 break;
@@ -264,6 +269,8 @@ public class BetterBlueSpyAI : MonoBehaviour
                     spyState = State.DoingMission;
                 }
                 break;
+
+
         }
     }
 
@@ -278,8 +285,6 @@ public class BetterBlueSpyAI : MonoBehaviour
         if (other.transform.tag == "Guard" && spyMission == Mission.StealKey)
         {
             spyMission = Mission.Documents;
-            door1.SendMessage("Unlocked");
-            door2.SendMessage("Unlocked");
         }
     }
 }
